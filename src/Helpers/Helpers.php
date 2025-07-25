@@ -41,32 +41,16 @@ if (! function_exists('getFileType')) {
             return null;
         }
 
-        switch ($mimeType) {
-            case 'application/pdf':
-                return 'pdf';
-            case 'application/zip':
-            case 'application/x-zip-compressed':
-                return 'zip';
-            case 'application/msword':
-            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                return 'docx';
-            case 'application/vnd.ms-excel':
-            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-                return 'xlsx';
-            case 'application/vnd.ms-powerpoint':
-            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-                return 'pptx';
-            case 'video/webm':
-            case 'video/ogg':
-            case 'video/mp4':
-                return 'video';
-            case 'audio/ogg':
-            case 'audio/wav':
-            case 'audio/mpeg':
-                return 'audio';
-            default:
-                return 'file';
-        }
+        return match ($mimeType) {
+            'application/pdf' => 'pdf',
+            'application/zip', 'application/x-zip-compressed' => 'zip',
+            'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
+            'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xlsx',
+            'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'pptx',
+            'video/webm', 'video/ogg', 'video/mp4' => 'video',
+            'audio/ogg', 'audio/wav', 'audio/mpeg' => 'audio',
+            default => 'file',
+        };
     }
 }
 
