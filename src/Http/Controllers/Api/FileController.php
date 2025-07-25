@@ -3,13 +3,15 @@
 namespace LivewireFilemanager\Filemanager\Http\Controllers\Api;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use LivewireFilemanager\Filemanager\Http\Requests\Api\UpdateFileRequest;
 use LivewireFilemanager\Filemanager\Http\Resources\MediaResource;
 use LivewireFilemanager\Filemanager\Models\Media;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class FileController extends Controller
 {
@@ -29,7 +31,12 @@ class FileController extends Controller
         return MediaResource::collection($files);
     }
 
-    public function show(Media $file)
+    /**
+     * @param \LivewireFilemanager\Filemanager\Models\Media  $file
+     *
+     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function show(Media $file): JsonResponse|BinaryFileResponse
     {
         $this->authorize('view', $file);
 
@@ -48,7 +55,7 @@ class FileController extends Controller
         return response()->download($filePath, $file->file_name);
     }
 
-    public function update(UpdateFileRequest $request, Media $file)
+    public function update(UpdateFileRequest $request, Media $file): MediaResource
     {
         $this->authorize('update', $file);
 
@@ -59,7 +66,7 @@ class FileController extends Controller
         return new MediaResource($file);
     }
 
-    public function destroy(Media $file)
+    public function destroy(Media $file): JsonResponse
     {
         $this->authorize('delete', $file);
 

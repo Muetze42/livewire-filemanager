@@ -152,7 +152,7 @@ class TestCase extends BaseTestCase
         rmdir($directory);
     }
 
-    private function runMigration(string $path, string $className = ''): void
+    protected function runMigration(string $path, string $className = ''): void
     {
         if (! isset(self::$migrations[$path])) {
             self::$migrations[$path] = require_once $path;

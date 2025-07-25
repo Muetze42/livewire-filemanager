@@ -109,7 +109,7 @@ class FolderController extends Controller
         ]);
     }
 
-    private function executeCallback(string $callbackName, $data = null): void
+    protected function executeCallback(string $callbackName, $data = null): void
     {
         $callback = config("livewire-fileuploader.callbacks.{$callbackName}");
 

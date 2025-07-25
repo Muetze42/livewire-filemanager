@@ -132,7 +132,7 @@ class LivewireFilemanagerComponent extends Component
         $this->loadFolders();
     }
 
-    private function generateBreadcrumb($folder): array
+    protected function generateBreadcrumb($folder): array
     {
         $breadcrumb = [];
 

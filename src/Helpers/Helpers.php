@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Trims a string to a specified maximum length.
+ * If the string length exceeds the specified maximum length, the middle part of the string
+ * is replaced with dots ('....') to fit within the allowed length, keeping the first part
+ * and the last 4 characters of the string.
+ *
+ * @param string  $string    The string to be trimmed.
+ * @param int     $maxLength The maximum allowed length.
+ *
+ * @return string The trimmed string.
+ */
+
 namespace LivewireFilemanager\Filemanager\Helpers;
 
 use LivewireFilemanager\Filemanager\Models\Folder;
@@ -13,9 +25,16 @@ use LivewireFilemanager\Filemanager\Models\Media;
 */
 
 if (! function_exists('trimString')) {
-    function trimString($string, $maxLength)
+    /**
+     * Trims a string to a specified maximum length, appending dots and preserving the end of the string.
+     *
+     * @param string  $string    The input string to be trimmed.
+     * @param int     $maxLength The maximum allowed length of the returned string.
+     *
+     * @return string
+     */
+    function trimString(string $string, int $maxLength): string
     {
-        // $extension = pathinfo($string, PATHINFO_EXTENSION);
         $baseLength = $maxLength - 8; // 4 for the dots and 4 for the last part of the filename
 
         if (strlen($string) <= $maxLength) {
@@ -37,6 +56,13 @@ if (! function_exists('trimString')) {
 */
 
 if (! function_exists('getFileType')) {
+    /**
+     * Determines the file type based on a given MIME type.
+     *
+     * @param string|null  $mimeType The MIME type to evaluate. Can be null.
+     *
+     * @return string|null
+     */
     function getFileType(?string $mimeType): ?string
     {
         if (! $mimeType) {
@@ -64,6 +90,13 @@ if (! function_exists('getFileType')) {
 */
 
 if (! function_exists('getMediaFullPath')) {
+    /**
+     * Constructs and returns the full path of a media file, including its hierarchy within associated folders.
+     *
+     * @param Media  $media The Media object for which the full path is to be generated.
+     *
+     * @return string
+     */
     function getMediaFullPath(Media $media): string
     {
         $folder = Folder::where('id', $media->model_id)->first();
@@ -91,7 +124,14 @@ if (! function_exists('getMediaFullPath')) {
 */
 
 if (! function_exists('buildFolderPath')) {
-    function buildFolderPath($folderId)
+    /**
+     * Builds a full folder path string recursively based on the folder ID.
+     *
+     * @param int  $folderId The ID of the folder to build the path for.
+     *
+     * @return string
+     */
+    function buildFolderPath(int $folderId): string
     {
         $folder = Folder::find($folderId);
 

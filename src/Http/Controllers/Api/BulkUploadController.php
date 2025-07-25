@@ -59,7 +59,7 @@ class BulkUploadController extends Controller
         return response()->json($response, empty($errors) ? Response::HTTP_OK : Response::HTTP_PARTIAL_CONTENT);
     }
 
-    private function executeCallback(string $callbackName, $data = null): void
+    protected function executeCallback(string $callbackName, $data = null): void
     {
         $callback = config("livewire-fileuploader.callbacks.{$callbackName}");
 

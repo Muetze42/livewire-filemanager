@@ -23,7 +23,7 @@ class ValidateFileUpload
         return $next($request);
     }
 
-    private function validateFiles(Request $request)
+    protected function validateFiles(Request $request): void
     {
         $maxSize = config('livewire-fileuploader.api.max_file_size', 10240);
         $allowedExtensions = config('livewire-fileuploader.api.allowed_extensions', ['jpg', 'jpeg', 'png', 'pdf', 'txt']);
@@ -54,7 +54,7 @@ class ValidateFileUpload
         }
     }
 
-    private function validateFileName(string $fileName): void
+    protected function validateFileName(string $fileName): void
     {
         if (preg_match('/[\\\\\/\:\*\?\"\<\>\|]/', $fileName)) {
             abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Invalid file name characters');
@@ -65,7 +65,7 @@ class ValidateFileUpload
         }
     }
 
-    private function validateFilePath(string $filePath): void
+    protected function validateFilePath(string $filePath): void
     {
         $realPath = realpath($filePath);
         $allowedPath = realpath(sys_get_temp_dir());
