@@ -1,5 +1,7 @@
 <?php
 
+namespace LivewireFilemanager\Filemanager\Helpers;
+
 use LivewireFilemanager\Filemanager\Models\Folder;
 use LivewireFilemanager\Filemanager\Models\Media;
 

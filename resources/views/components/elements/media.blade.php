@@ -10,11 +10,11 @@
         @if($media->hasGeneratedConversion('thumbnail'))
             <img src="{{ $media->getUrl('thumbnail') }}" class="mx-auto shadow border p-1 bg-white max-w-20 max-h-20 mb-2" alt="folder">
         @else
-            <x-dynamic-component id="icon-{{ $key }}" :component="'livewire-filemanager::icons.mimes.' . getFileType($media->mime_type)" class="mx-auto w-16 h-16 mb-2.5" />
+            <x-dynamic-component id="icon-{{ $key }}" :component="'livewire-filemanager::icons.mimes.' . \LivewireFilemanager\Filemanager\Helpers\getFileType($media->mime_type)" class="mx-auto w-16 h-16 mb-2.5" />
         @endif
     </div>
 
     <div class="flex flex-wrap text-center">
-        <span class="text-ellipsis overflow-hidden break-words w-full block text-xs max-w-[150px] dark:text-zinc-200">{{ trimString($media->name, 38) }}</span>
+        <span class="text-ellipsis overflow-hidden break-words w-full block text-xs max-w-[150px] dark:text-zinc-200">{{ \LivewireFilemanager\Filemanager\Helpers\trimString($media->name, 38) }}</span>
     </div>
 </div>

@@ -5,6 +5,8 @@ namespace LivewireFilemanager\Filemanager\Http\Controllers\Files;
 use LivewireFilemanager\Filemanager\Models\Folder;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
+use function LivewireFilemanager\Filemanager\Helpers\buildFolderPath;
+
 class FileController
 {
     public function show($path): BinaryFileResponse
