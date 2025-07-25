@@ -56,17 +56,13 @@ if (! function_exists('getFileType')) {
             case 'application/vnd.ms-powerpoint':
             case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
                 return 'pptx';
+            case 'video/webm':
+            case 'video/ogg':
             case 'video/mp4':
                 return 'video';
-            case 'video/webm':
-                return 'video';
-            case 'video/ogg':
-                return 'video';
-            case 'audio/mpeg':
-                return 'audio';
             case 'audio/ogg':
-                return 'audio';
             case 'audio/wav':
+            case 'audio/mpeg':
                 return 'audio';
             default:
                 return 'file';
