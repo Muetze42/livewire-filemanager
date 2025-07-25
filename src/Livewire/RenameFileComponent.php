@@ -2,6 +2,7 @@
 
 namespace LivewireFilemanager\Filemanager\Livewire;
 
+use Illuminate\Contracts\View\View as ViewInterface;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
@@ -15,14 +16,14 @@ class RenameFileComponent extends Component
     public $name;
 
     #[On('rename-file')]
-    public function renameFile($file)
+    public function renameFile($file): void
     {
         $this->file = Media::find($file['id']);
 
         $this->name = pathinfo($this->file->name, PATHINFO_FILENAME);
     }
 
-    public function save()
+    public function save(): void
     {
         $this->validate([
             'name' => ['required'],
@@ -53,7 +54,7 @@ class RenameFileComponent extends Component
         $this->dispatch('reset-media');
     }
 
-    public function render()
+    public function render(): ViewInterface
     {
         return view('livewire-filemanager::livewire.rename-file');
     }

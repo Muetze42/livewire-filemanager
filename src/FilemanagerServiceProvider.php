@@ -24,15 +24,16 @@ use LivewireFilemanager\Filemanager\Livewire\LivewireFilemanagerFolderPanelCompo
 
 class FilemanagerServiceProvider extends ServiceProvider
 {
-    protected $policies = [
-        Media::class => MediaPolicy::class,
-        Folder::class => FolderPolicy::class,
-    ];
-
-    public function boot()
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'livewire-filemanager');
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang/', 'livewire-filemanager');
+
+        Gate::policy(Media::class, MediaPolicy::class);
+        Gate::policy(Folder::class, FolderPolicy::class);
 
         $this
             ->registerPublishables()
@@ -42,11 +43,6 @@ class FilemanagerServiceProvider extends ServiceProvider
             ->registerPolicies()
             ->registerApiRoutes()
             ->registerMiddleware();
-    }
-
-    public function register()
-    {
-        parent::register();
     }
 
     protected function registerPublishables(): self

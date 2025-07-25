@@ -2,6 +2,7 @@
 
 namespace LivewireFilemanager\Filemanager\Livewire;
 
+use Illuminate\Contracts\View\View as ViewInterface;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -14,14 +15,14 @@ class RenameFolderComponent extends Component
     public $name;
 
     #[On('rename-folder')]
-    public function renameFolder($folder)
+    public function renameFolder($folder): void
     {
         $this->folder = Folder::find($folder['id']);
 
         $this->name = $this->folder->name;
     }
 
-    public function save()
+    public function save(): void
     {
         $this->validate([
             'name' => [
@@ -46,7 +47,7 @@ class RenameFolderComponent extends Component
         $this->dispatch('reset-folder');
     }
 
-    public function render()
+    public function render(): ViewInterface
     {
         return view('livewire-filemanager::livewire.rename-folder');
     }

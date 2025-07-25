@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait HasMediaOwner
 {
-    protected static function booted()
+    protected static function booted(): void
     {
-        static::addGlobalScope('user_id', function (Builder $builder) {
+        static::addGlobalScope('user_id', static function (Builder $builder) {
             if (! config('livewire-fileuploader.acl_enabled')) {
                 return;
             }
 
-            $user = null;
+            // $user = null;
 
             try {
                 $user = auth()->getUser();

@@ -3,10 +3,11 @@
 namespace LivewireFilemanager\Filemanager\Http\Controllers\Files;
 
 use LivewireFilemanager\Filemanager\Models\Folder;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class FileController
 {
-    public function show($path)
+    public function show($path): BinaryFileResponse
     {
         $segments = explode('/', $path);
         $fileName = array_pop($segments);

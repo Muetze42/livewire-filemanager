@@ -3,7 +3,9 @@
 namespace LivewireFilemanager\Filemanager\Http\Controllers\Api;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +21,7 @@ class FolderController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
         $folders = Folder::with(['children', 'media'])
             ->when($request->parent_id, function ($query, $parentId) {
@@ -33,7 +35,7 @@ class FolderController extends Controller
         return FolderResource::collection($folders);
     }
 
-    public function store(StoreFolderRequest $request)
+    public function store(StoreFolderRequest $request): FolderResource
     {
         $this->executeCallback('before_upload', $request);
 
@@ -48,14 +50,14 @@ class FolderController extends Controller
         return new FolderResource($folder);
     }
 
-    public function show(Folder $folder)
+    public function show(Folder $folder): FolderResource
     {
         $this->authorize('view', $folder);
 
         return new FolderResource($folder->load(['children', 'media']));
     }
 
-    public function update(UpdateFolderRequest $request, Folder $folder)
+    public function update(UpdateFolderRequest $request, Folder $folder): FolderResource
     {
         $this->authorize('update', $folder);
 
@@ -67,7 +69,7 @@ class FolderController extends Controller
         return new FolderResource($folder);
     }
 
-    public function destroy(Folder $folder)
+    public function destroy(Folder $folder): JsonResponse
     {
         $this->authorize('delete', $folder);
 
@@ -80,7 +82,7 @@ class FolderController extends Controller
         return response()->json(['message' => 'Folder deleted successfully']);
     }
 
-    public function upload(UploadFilesRequest $request, Folder $folder)
+    public function upload(UploadFilesRequest $request, Folder $folder): JsonResponse
     {
         $this->authorize('update', $folder);
 
@@ -107,12 +109,12 @@ class FolderController extends Controller
         ]);
     }
 
-    private function executeCallback(string $callbackName, $data = null)
+    private function executeCallback(string $callbackName, $data = null): void
     {
         $callback = config("livewire-fileuploader.callbacks.{$callbackName}");
 
         if ($callback && is_callable($callback)) {
-            call_user_func($callback, $data);
+            $callback($data);
         }
     }
 }

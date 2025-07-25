@@ -4,12 +4,17 @@ namespace LivewireFilemanager\Filemanager\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class ValidateFileUpload
 {
-    public function handle(Request $request, Closure $next)
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
+    public function handle(Request $request, Closure $next): Response
     {
         if ($request->hasFile('files')) {
             $this->validateFiles($request);
@@ -49,23 +54,23 @@ class ValidateFileUpload
         }
     }
 
-    private function validateFileName(string $fileName)
+    private function validateFileName(string $fileName): void
     {
         if (preg_match('/[\\\\\/\:\*\?\"\<\>\|]/', $fileName)) {
             abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Invalid file name characters');
         }
 
-        if (strpos($fileName, '..') !== false) {
+        if (str_contains($fileName, '..')) {
             abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Path traversal detected in file name');
         }
     }
 
-    private function validateFilePath(string $filePath)
+    private function validateFilePath(string $filePath): void
     {
         $realPath = realpath($filePath);
         $allowedPath = realpath(sys_get_temp_dir());
 
-        if ($realPath === false || strpos($realPath, $allowedPath) !== 0) {
+        if ($realPath === false || ! str_starts_with($realPath, $allowedPath)) {
             abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Invalid file path');
         }
     }

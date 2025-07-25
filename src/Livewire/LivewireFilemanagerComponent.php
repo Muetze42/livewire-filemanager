@@ -2,6 +2,7 @@
 
 namespace LivewireFilemanager\Filemanager\Livewire;
 
+use Illuminate\Contracts\View\View as ViewInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
@@ -38,7 +39,7 @@ class LivewireFilemanagerComponent extends Component
 
     protected $listeners = ['fileAdded'];
 
-    public function mount()
+    public function mount(): void
     {
         if (! session('currentFolderId')) {
             session(['currentFolderId' => Folder::whereNotNull('parent_id')->first() ? Folder::whereNotNull('parent_id')->first()->id : null]);
@@ -54,7 +55,7 @@ class LivewireFilemanagerComponent extends Component
         }
     }
 
-    public function createRootFolder()
+    public function createRootFolder(): void
     {
         $this->validate([
             'newFolderName' => 'required|max:255',
@@ -63,7 +64,7 @@ class LivewireFilemanagerComponent extends Component
         ]);
     }
 
-    public function toggleFolderSelection(int $folderId)
+    public function toggleFolderSelection(int $folderId): void
     {
         if (! in_array($folderId, $this->selectedFolders)) {
             $this->selectedFolders[] = $folderId;
@@ -72,7 +73,7 @@ class LivewireFilemanagerComponent extends Component
         }
     }
 
-    public function toggleFileSelection(int $fileId)
+    public function toggleFileSelection(int $fileId): void
     {
         if (! in_array($fileId, $this->selectedFiles)) {
             $this->selectedFiles[] = $fileId;
@@ -81,9 +82,9 @@ class LivewireFilemanagerComponent extends Component
         }
     }
 
-    public function loadFolders()
+    public function loadFolders(): void
     {
-        if ($this->search != '') {
+        if (! empty($this->search)) {
             $this->folders = Folder::whereNotNull('parent_id')->where('name', 'like', '%'.$this->search.'%')->get();
             $this->searchedFiles = Media::where('collection_name', 'medialibrary')->where('name', 'like', '%'.$this->search.'%')->get();
         } else {
@@ -95,32 +96,32 @@ class LivewireFilemanagerComponent extends Component
         $this->selectedFiles = [];
     }
 
-    public function deleteItems()
+    public function deleteItems(): void
     {
         $this->dispatch('delete-items', folders: $this->selectedFolders, files: $this->selectedFiles);
     }
 
     #[On('folder-deleted')]
-    public function folderDeleted()
+    public function folderDeleted(): void
     {
         $this->loadFolders();
     }
 
     #[On('reset-media')]
-    public function resetMedias()
+    public function resetMedias(): void
     {
         $this->selectedFolders = [];
         $this->selectedFiles = [];
     }
 
     #[On('reset-folder')]
-    public function resetFolders()
+    public function resetFolders(): void
     {
         $this->selectedFolders = [];
         $this->selectedFiles = [];
     }
 
-    public function updatedSearch()
+    public function updatedSearch(): void
     {
         $this->currentFolder = Folder::whereNull('parent_id')->first();
 
@@ -131,7 +132,7 @@ class LivewireFilemanagerComponent extends Component
         $this->loadFolders();
     }
 
-    private function generateBreadcrumb($folder)
+    private function generateBreadcrumb($folder): array
     {
         $breadcrumb = [];
 
@@ -144,7 +145,7 @@ class LivewireFilemanagerComponent extends Component
         return $breadcrumb;
     }
 
-    public function createNewFolder()
+    public function createNewFolder(): void
     {
         $this->isCreatingNewFolder = true;
 
@@ -153,7 +154,7 @@ class LivewireFilemanagerComponent extends Component
         $this->dispatch('new-folder-created');
     }
 
-    public function saveNewFolder()
+    public function saveNewFolder(): void
     {
         $this->validate([
             'newFolderName' => [
@@ -189,7 +190,7 @@ class LivewireFilemanagerComponent extends Component
         $this->loadFolders();
     }
 
-    public function navigateToParent()
+    public function navigateToParent(): void
     {
         $this->search = '';
 
@@ -198,7 +199,7 @@ class LivewireFilemanagerComponent extends Component
 
             $this->currentFolder = $parentFolder;
 
-            session(['currentFolderId' => $parentFolder->id]);
+            session(['currentFolderId' => $parentFolder?->id]);
 
             array_pop($this->breadcrumb);
 
@@ -206,7 +207,7 @@ class LivewireFilemanagerComponent extends Component
         }
     }
 
-    public function navigateToFolder($folderId)
+    public function navigateToFolder($folderId): void
     {
         $this->search = '';
         $this->dispatch('reset-folder');
@@ -222,7 +223,7 @@ class LivewireFilemanagerComponent extends Component
         session(['currentFolderId' => $folder->id]);
     }
 
-    public function navigateToBreadcrumb($breadcrumbIndex)
+    public function navigateToBreadcrumb($breadcrumbIndex): void
     {
         $this->search = '';
 
@@ -233,7 +234,7 @@ class LivewireFilemanagerComponent extends Component
         $this->loadFolders();
     }
 
-    public function updatedFiles()
+    public function updatedFiles(): void
     {
         foreach ($this->files as $file) {
             $this->currentFolder
@@ -256,16 +257,14 @@ class LivewireFilemanagerComponent extends Component
         $this->files = [];
     }
 
-    public function handleMediaClick($fileId)
+    public function handleMediaClick($fileId): void
     {
         if (count($this->selectedFiles) > 1) {
             $this->dispatch('reset-media');
+        } elseif (in_array($fileId, $this->selectedFiles)) {
+            $this->dispatch('load-media', $fileId);
         } else {
-            if (in_array($fileId, $this->selectedFiles)) {
-                $this->dispatch('load-media', $fileId);
-            } else {
-                $this->dispatch('reset-media');
-            }
+            $this->dispatch('reset-media');
         }
 
         if (count($this->selectedFolders) > 0) {
@@ -273,16 +272,14 @@ class LivewireFilemanagerComponent extends Component
         }
     }
 
-    public function handleFolderClick($folderId)
+    public function handleFolderClick($folderId): void
     {
         if (count($this->selectedFolders) > 1) {
             $this->dispatch('reset-folder');
+        } elseif (in_array($folderId, $this->selectedFolders)) {
+            $this->dispatch('load-folder', $folderId);
         } else {
-            if (in_array($folderId, $this->selectedFolders)) {
-                $this->dispatch('load-folder', $folderId);
-            } else {
-                $this->dispatch('reset-folder');
-            }
+            $this->dispatch('reset-folder');
         }
 
         if (count($this->selectedFiles) > 0) {
@@ -290,7 +287,7 @@ class LivewireFilemanagerComponent extends Component
         }
     }
 
-    public function render()
+    public function render(): ViewInterface
     {
         return view('livewire-filemanager::livewire.livewire-filemanager');
     }

@@ -4,12 +4,20 @@ namespace LivewireFilemanager\Filemanager\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin \LivewireFilemanager\Filemanager\Models\Media
+ */
 class MediaResource extends JsonResource
 {
-    public function toArray($request)
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray($request): array
     {
         return [
-            'id' => $this->id,
+            'id' => $this->getKey(),
             'model_type' => $this->model_type,
             'model_id' => $this->model_id,
             'uuid' => $this->uuid,

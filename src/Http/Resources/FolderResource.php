@@ -4,12 +4,20 @@ namespace LivewireFilemanager\Filemanager\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin \LivewireFilemanager\Filemanager\Models\Folder
+ */
 class FolderResource extends JsonResource
 {
-    public function toArray($request)
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray($request): array
     {
         return [
-            'id' => $this->id,
+            'id' => $this->getKey(),
             'name' => $this->name,
             'slug' => $this->slug,
             'parent_id' => $this->parent_id,
@@ -17,7 +25,7 @@ class FolderResource extends JsonResource
             'elements_count' => $this->children_count + $this->getMedia('medialibrary')->count(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'children' => FolderResource::collection($this->whenLoaded('children')),
+            'children' => static::collection($this->whenLoaded('children')),
             'media' => MediaResource::collection($this->whenLoaded('media')),
         ];
     }

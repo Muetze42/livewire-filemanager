@@ -3,6 +3,7 @@
 namespace LivewireFilemanager\Filemanager\Http\Controllers\Api;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,7 @@ class BulkUploadController extends Controller
 {
     use AuthorizesRequests;
 
-    public function store(BulkUploadRequest $request)
+    public function store(BulkUploadRequest $request): JsonResponse
     {
         $folder = Folder::findOrFail($request->folder_id);
         $this->authorize('update', $folder);
@@ -58,12 +59,12 @@ class BulkUploadController extends Controller
         return response()->json($response, empty($errors) ? Response::HTTP_OK : Response::HTTP_PARTIAL_CONTENT);
     }
 
-    private function executeCallback(string $callbackName, $data = null)
+    private function executeCallback(string $callbackName, $data = null): void
     {
         $callback = config("livewire-fileuploader.callbacks.{$callbackName}");
 
         if ($callback && is_callable($callback)) {
-            call_user_func($callback, $data);
+            $callback($data);
         }
     }
 }

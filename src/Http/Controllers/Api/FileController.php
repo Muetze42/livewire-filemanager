@@ -4,6 +4,7 @@ namespace LivewireFilemanager\Filemanager\Http\Controllers\Api;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use LivewireFilemanager\Filemanager\Http\Requests\Api\UpdateFileRequest;
@@ -14,7 +15,7 @@ class FileController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
         $files = Media::query()
             ->when($request->folder_id, function ($query, $folderId) {

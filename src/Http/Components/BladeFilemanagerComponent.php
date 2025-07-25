@@ -2,11 +2,13 @@
 
 namespace LivewireFilemanager\Filemanager\Http\Components;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class BladeFilemanagerComponent extends Component
 {
-    public function render()
+    public function render(): Factory|View
     {
         return view('livewire-filemanager::components.livewire-filemanager');
     }
