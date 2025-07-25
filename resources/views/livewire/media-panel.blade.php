@@ -9,7 +9,7 @@
             <div class="absolute end-4 top-4 flex h-7 items-center">
                 <button @click="Livewire.dispatch('reset-media', { media_id: null })" type="button" class="relative rounded-md border text-zinc-500 border-zinc-300 p-1 focus:outline-none focus:ring-2 focus:ring-white dark:border-zinc-600 dark:text-zinc-500" @click="open = false">
                     <span class="absolute -inset-2.5"></span>
-                    <span class="sr-only">Close panel</span>
+                    <span class="sr-only">{{ __('livewire-filemanager::filemanager.panel.close') }}</span>
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -35,7 +35,7 @@
                 </ul>
 
                 <div class="mt-4">
-                    <strong class="text-black font-medium dark:text-gray-300">Informations</strong>
+                    <strong class="text-black font-medium dark:text-gray-300">{{ __('livewire-filemanager::filemanager.infos') }}</strong>
                     <dl class="mt-2 divide-y divide-gray-200 border-b border-t border-gray-200 dark:divide-zinc-600 dark:border-zinc-600">
                         <div class="flex justify-between py-3 text-sm font-medium">
                             <dt class="text-gray-500 dark:text-gray-200">{{ __('livewire-filemanager::filemanager.created') }}</dt>

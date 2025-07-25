@@ -30,4 +30,8 @@ return [
     'validation' => [
         'folder_name_required' => 'Ein Ordnername ist erforderlich',
     ],
+    'infos' => 'Informationen',
+    'panel' => [
+        'close' => 'Panel schließen',
+    ],
 ];
