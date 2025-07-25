@@ -13,7 +13,7 @@ use LivewireFilemanager\Filemanager\Models\Media;
 if (! function_exists('trimString')) {
     function trimString($string, $maxLength)
     {
-        $extension = pathinfo($string, PATHINFO_EXTENSION);
+        // $extension = pathinfo($string, PATHINFO_EXTENSION);
         $baseLength = $maxLength - 8; // 4 for the dots and 4 for the last part of the filename
 
         if (strlen($string) <= $maxLength) {
