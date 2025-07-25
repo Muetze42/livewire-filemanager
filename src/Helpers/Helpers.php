@@ -62,7 +62,7 @@ if (! function_exists('getFileType')) {
 */
 
 if (! function_exists('getMediaFullPath')) {
-    function getMediaFullPath(Media $media)
+    function getMediaFullPath(Media $media): string
     {
         $folder = Folder::where('id', $media->model_id)->first();
 
