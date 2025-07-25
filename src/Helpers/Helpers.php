@@ -95,8 +95,8 @@ if (! function_exists('buildFolderPath')) {
 
         if ($folder && $folder->parentWithoutRootFolder) {
             return buildFolderPath($folder->parentWithoutRootFolder->id).'/'.$folder->slug;
-        } else {
-            return $folder ? $folder->slug : '';
         }
+
+        return $folder ? $folder->slug : '';
     }
 }
